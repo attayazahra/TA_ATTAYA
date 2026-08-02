@@ -109,7 +109,7 @@ function WarnaPage() {
   const getAllWarna = useCallback(() => {
     const areaWarna = drawnAreasRef.current.map((area) => area.warnaNama)
     const uniqueAreaWarna = [...new Set(areaWarna)]
-    
+
     if (warnaSimulasi) {
       return [...new Set([...uniqueAreaWarna, warnaSimulasi.nama])]
     }
@@ -205,7 +205,7 @@ function WarnaPage() {
 
       if (result.status === 'success') {
         console.log('✅ Simulasi tersimpan! ID:', result.data.id)
-        
+
         setRiwayatId(result.data.id)
         localStorage.setItem('riwayatSimulasiId', String(result.data.id))
         setWarnaSementara([])
@@ -333,11 +333,11 @@ function WarnaPage() {
   const handleCanvasMouseDown = useCallback(
     (e) => {
       if (!selectionMode || !warnaSimulasi) return
-      
+
       if (comparisonMode) {
         setComparisonMode(false)
       }
-      
+
       isDrawingRef.current = true
       addSelectionArea(e)
     },
@@ -359,7 +359,7 @@ function WarnaPage() {
     setSelectedAreas([...drawnAreasRef.current])
 
     const allWarna = getAllWarna()
-    
+
     // 🔥 Update state sementara (belum ke database)
     if (allWarna.length > 0) {
       setWarnaSementara((prev) => {
@@ -1478,8 +1478,8 @@ function WarnaPage() {
                             }
                             style={styles.brushSlider}
                           />
-                          <span style={{ 
-                            fontSize: isMobile ? '8px' : '10px', 
+                          <span style={{
+                            fontSize: isMobile ? '8px' : '10px',
                             color: '#78716C',
                             whiteSpace: 'nowrap'
                           }}>
@@ -1823,8 +1823,8 @@ function WarnaPage() {
                         warnaSimulasi?.id === warna.id
                           ? `2px solid ${orangeSoft}`
                           : isSelected
-                          ? `3px solid #10b981`
-                          : '2px solid transparent',
+                            ? `3px solid #10b981`
+                            : '2px solid transparent',
                     }}
                     onClick={() => {
                       if (comparisonMode) {
