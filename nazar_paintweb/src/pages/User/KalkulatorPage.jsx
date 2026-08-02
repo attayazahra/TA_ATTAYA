@@ -82,7 +82,7 @@ function KalkulatorPage() {
   const fetchHarga = async () => {
     try {
       setLoadingHarga(true)
-      const response = await fetch('http://localhost:8081/api/v1.0/harga')
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/harga`)
       const result = await response.json()
       if (result.status === 'success') {
         setHargaList(result.data)
@@ -126,7 +126,7 @@ function KalkulatorPage() {
     try {
       const sessionId = await getSessionId()
 
-      await fetch('http://localhost:8081/api/v1.0/riwayat/kalkulator', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/kalkulator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

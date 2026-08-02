@@ -89,7 +89,7 @@ function AdminDashboard() {
       const adminName = localStorage.getItem('adminName') || 'Admin'
       const adminId = localStorage.getItem('adminId') || 1
       
-      await fetch('http://localhost:8081/api/v1.0/riwayat/admin', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/admin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -150,7 +150,7 @@ function AdminDashboard() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8081/api/v1.0/harga/${encodeURIComponent(jenis)}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/harga/${encodeURIComponent(jenis)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ harga_per_kg: harga }),
@@ -225,7 +225,7 @@ function AdminDashboard() {
     }
 
     try {
-      const response = await fetch('http://localhost:8081/api/v1.0/warna', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/warna`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -305,7 +305,7 @@ function AdminDashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:8081/api/v1.0/warna/${editWarna.id}`,
+        `${import.meta.env.VITE_API_URL}/api/v1.0/warna/${editWarna.id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -373,7 +373,7 @@ function AdminDashboard() {
     if (!result.isConfirmed) return
 
     try {
-      const response = await fetch(`http://localhost:8081/api/v1.0/warna/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/warna/${id}`, {
         method: 'DELETE',
       })
       const resultData = await response.json()

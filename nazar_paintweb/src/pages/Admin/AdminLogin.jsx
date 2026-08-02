@@ -58,7 +58,7 @@ function AdminLogin() {
   // ===== SIMPAN RIWAYAT LOGIN =====
   const simpanRiwayatLogin = async (adminId, adminName, loginType, detail) => {
     try {
-      await fetch('http://localhost:8081/api/v1.0/riwayat/admin', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/admin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -92,7 +92,7 @@ function AdminLogin() {
 
     try {
       const response = await fetch(
-        'http://localhost:8081/api/v1.0/admin/forgot-password',
+        `${import.meta.env.VITE_API_URL}/api/v1.0/admin/forgot-password`,
         {
           method: 'POST',
           headers: {
@@ -133,7 +133,7 @@ function AdminLogin() {
 
     try {
       const response = await fetch(
-        'http://localhost:8081/api/v1.0/admin/login',
+        `${import.meta.env.VITE_API_URL}/api/v1.0/admin/login`,
         {
           method: 'POST',
           headers: {
@@ -186,7 +186,7 @@ function AdminLogin() {
 
       if (ADMIN_EMAILS.includes(email)) {
         const response = await fetch(
-          'http://localhost:8081/api/v1.0/admin/login-google',
+          `${import.meta.env.VITE_API_URL}/api/v1.0/admin/login-google`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

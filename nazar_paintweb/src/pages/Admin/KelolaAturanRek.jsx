@@ -59,7 +59,7 @@ function KelolaAturanRek({ styles: propStyles, isMobile }) {
   ];
 
   // ========== API BASE URL ==========
-  const API_BASE = 'http://localhost:8081/api/v1.0';
+  const API_BASE = `${import.meta.env.VITE_API_URL}/api/v1.0`;
 
   // ========== SIMPAN RIWAYAT ADMIN ==========
   const simpanRiwayatAdmin = async (aktivitas, detail) => {
@@ -67,7 +67,7 @@ function KelolaAturanRek({ styles: propStyles, isMobile }) {
       const adminName = localStorage.getItem('adminName') || 'Admin';
       const adminId = localStorage.getItem('adminId') || 1;
       
-      await fetch('http://localhost:8081/api/v1.0/riwayat/admin', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/admin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

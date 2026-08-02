@@ -76,7 +76,7 @@ function RekomendasiPage() {
       const warnaDirekomendasikan = JSON.stringify(hasilRekomendasi.map(w => w.nama))
       const warnaDipilihStr = warnaDipilih.join(', ')
 
-      const response = await fetch('http://localhost:8081/api/v1.0/riwayat/rekomendasi', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/rekomendasi`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -33,7 +33,7 @@ function StokTab({
   const fetchWarna = async () => {
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:8081/api/v1.0/warna')
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/warna`)
       const result = await response.json()
       if (result.status === 'success') {
         setWarnaList(result.data)
@@ -90,7 +90,7 @@ function StokTab({
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `http://localhost:8081/api/v1.0/warna/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/v1.0/warna/${id}`,
           {
             method: 'DELETE',
           },

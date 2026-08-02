@@ -76,7 +76,7 @@ function RiwayatTab({ styles: propStyles, isMobile }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const API_BASE = 'http://localhost:8081/api/v1.0/riwayat'
+  const API_BASE = `${import.meta.env.VITE_API_URL}/api/v1.0/riwayat`
 
   // ===== FETCH DATA DARI BACKEND =====
   const fetchRiwayat = async () => {

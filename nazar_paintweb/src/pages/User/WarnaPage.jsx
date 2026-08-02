@@ -127,7 +127,7 @@ function WarnaPage() {
       if (!sessionId) return
 
       const response = await fetch(
-        'http://localhost:8081/api/v1.0/riwayat/simulasi',
+        `${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/simulasi`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -190,7 +190,7 @@ function WarnaPage() {
         warnaDibandingkan: warnaDibandingkan,
       })
 
-      const response = await fetch('http://localhost:8081/api/v1.0/riwayat/simulasi/warna', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/simulasi/warna`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -241,7 +241,7 @@ function WarnaPage() {
   const fetchWarna = async () => {
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:8081/api/v1.0/warna')
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/warna`)
       const result = await response.json()
       if (result.status === 'success') {
         setWarnaList(result.data)

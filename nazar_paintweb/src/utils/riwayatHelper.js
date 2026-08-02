@@ -1,6 +1,6 @@
 // utils/riwayatHelper.js
 
-const API_BASE = 'http://localhost:8081/api/v1.0/riwayat'
+const API_BASE = `${import.meta.env.VITE_API_URL}/api/v1.0/riwayat`
 
 /**
  * Simpan riwayat secara otomatis ke backend

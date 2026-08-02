@@ -15,7 +15,7 @@ export const getSessionId = async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:8081/api/v1.0/session')
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/session`)
     const result = await response.json()
     if (result.status === 'success') {
       const sessionId = result.data.session_id

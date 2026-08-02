@@ -1,8 +1,10 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
   plugins: [
     react(),
     VitePWA({
@@ -14,7 +16,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: ({ url, request }) =>
-              url.origin === 'http://localhost:8081' &&
+              url.origin === env.VITE_API_URL &&
               url.pathname.startsWith('/api/v1.0/') &&
               request.method === 'GET',
             handler: 'NetworkFirst',
@@ -51,5 +53,6 @@ export default defineConfig({
   server: {
     host: true,
     port: 5174
+  }
   }
 })
