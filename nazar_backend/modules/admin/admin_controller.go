@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -141,6 +142,7 @@ func (c *AdminController) LoginGoogle(ctx *gin.Context) {
 }
 
 // ===== FORGOT PASSWORD =====
+// ===== FORGOT PASSWORD =====
 func (c *AdminController) ForgotPassword(ctx *gin.Context) {
 	var req ForgotPasswordRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -168,11 +170,18 @@ func (c *AdminController) ForgotPassword(ctx *gin.Context) {
 		return
 	}
 
-	resetLink := "https://api-nazar-paintweb.ryaze.my.id/admin/reset-password?token=" + token
+	// ✅ BACA FRONTEND_URL DARI .ENV
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		frontendURL = "https://nazar-paintweb.ryaze.my.id" // Fallback default frontend
+	}
+
+	// ✅ BENTUK LINK MENGARAH KE WEB FRONTEND REACT
+	resetLink := fmt.Sprintf("%s/admin/reset-password?token=%s", frontendURL, token)
 
 	err = utils.SendResetEmail(req.Email, resetLink)
 	if err != nil {
-		// Tetap return success biar user ga tau email valid
+		// Tetap return success agar tidak mentrigger enumeration attack
 		ctx.JSON(http.StatusOK, gin.H{
 			"status":  "success",
 			"message": "Link reset password telah dikirim ke email Anda",
