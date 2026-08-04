@@ -151,6 +151,7 @@ function KalkulatorPage() {
     }
   }
 
+  // ===== FUNGSI HITUNG (BARU) =====
   const hitungKebutuhan = async () => {
     const p = parseFloat(panjang)
     const l = parseFloat(lebar)
@@ -158,7 +159,7 @@ function KalkulatorPage() {
 
     if (isNaN(p) || isNaN(l) || isNaN(t) || p <= 0 || l <= 0 || t <= 0) {
       alert(
-        'Mohon isi panjang, lebar, dan tinggi ruangan dengan angka yang valid!',
+        'Mohon isi panjang, lebar, dan tinggi ruangan dengan angka yang valid!'
       )
       return
     }

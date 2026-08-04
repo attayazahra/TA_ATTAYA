@@ -4,7 +4,6 @@ import {
   FaEye,
   FaEyeSlash,
   FaArrowLeft,
-  FaGoogle,
   FaCheckCircle,
   FaTimes,
   FaLock,
@@ -13,12 +12,155 @@ import {
 } from 'react-icons/fa'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 
-// Client ID dari Google Cloud Console
 const GOOGLE_CLIENT_ID =
   '590466406326-3is9ihkrrnk06abthc7kktsicon0qktm.apps.googleusercontent.com'
 
-// Whitelist email yang boleh akses admin
 const ADMIN_EMAILS = ['grecyedl@gmail.com']
+
+// ✅ PASANG PROPS PADA FORGOTPASSWORDMODAL
+const ForgotPasswordModal = ({
+  showForgotModal,
+  setShowForgotModal,
+  resetEmail,
+  setResetEmail,
+  resetMessage,
+  setResetMessage,
+  resetError,
+  setResetError,
+  isSendingEmail,
+  handleForgotPassword,
+  handleGoogleSuccess,
+  handleGoogleError,
+  isMobile,
+  modalStyles,
+  textDark,
+  textLight,
+  orangeColor,
+  orangeLight,
+  borderColor,
+}) => {
+  if (!showForgotModal) return null
+
+  return (
+    <div
+      style={modalStyles.overlay}
+      onClick={() => {
+        if (!isSendingEmail) {
+          setShowForgotModal(false)
+          setResetError('')
+          setResetMessage('')
+          setResetEmail('')
+        }
+      }}
+    >
+      <div style={modalStyles.modal} onClick={(e) => e.stopPropagation()}>
+        <button
+          style={modalStyles.modalCloseButton}
+          onClick={() => {
+            if (!isSendingEmail) {
+              setShowForgotModal(false)
+              setResetError('')
+              setResetMessage('')
+              setResetEmail('')
+            }
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = textDark)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = textLight)}
+        >
+          <FaTimes />
+        </button>
+
+        <h2 style={modalStyles.modalTitle}>
+          <FaLock size={isMobile ? 20 : 24} /> Lupa Password
+        </h2>
+        <p style={modalStyles.modalSubtitle}>
+          Masukkan email Anda untuk menerima link reset password.
+        </p>
+
+        {resetMessage && (
+          <div style={modalStyles.successMessage}>
+            <FaCheckCircle size={18} />
+            {resetMessage}
+          </div>
+        )}
+
+        {resetError && <div style={modalStyles.errorMessage}>{resetError}</div>}
+
+        <div style={modalStyles.modalInputWrapper}>
+          <FaEnvelope style={modalStyles.modalInputIcon} />
+          <input
+            type="email"
+            style={modalStyles.modalInput}
+            placeholder="Masukkan email Anda"
+            value={resetEmail}
+            onChange={(e) => {
+              setResetEmail(e.target.value)
+              setResetError('')
+              setResetMessage('')
+            }}
+            disabled={isSendingEmail}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = orangeColor
+              e.currentTarget.style.boxShadow = `0 0 0 3px ${orangeColor}20`
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = borderColor
+              e.currentTarget.style.boxShadow = 'none'
+            }}
+          />
+        </div>
+
+        <button
+          style={modalStyles.modalButton}
+          onClick={handleForgotPassword}
+          disabled={isSendingEmail}
+          onMouseEnter={(e) => {
+            if (!isSendingEmail) {
+              e.currentTarget.style.backgroundColor = orangeLight
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isSendingEmail) {
+              e.currentTarget.style.backgroundColor = orangeColor
+            }
+          }}
+        >
+          {isSendingEmail ? (
+            <>
+              <FaSpinner
+                size={16}
+                style={{ animation: 'spin 1s linear infinite' }}
+              />{' '}
+              Mengirim...
+            </>
+          ) : (
+            <>
+              <FaEnvelope size={16} /> Kirim Link Reset
+            </>
+          )}
+        </button>
+
+        <div style={modalStyles.divider}>
+          <div style={modalStyles.dividerLine} />
+          <span>or sign up using</span>
+          <div style={modalStyles.dividerLine} />
+        </div>
+
+        <div style={modalStyles.googleWrapper}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            useOneTap
+            shape="pill"
+            size={isMobile ? 'medium' : 'large'}
+            text="signin_with"
+            locale="id"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function AdminLogin() {
   const [username, setUsername] = useState('')
@@ -29,14 +171,11 @@ function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  // ===== STATE UNTUK FORGOT PASSWORD =====
   const [showForgotModal, setShowForgotModal] = useState(false)
   const [resetEmail, setResetEmail] = useState('')
   const [resetMessage, setResetMessage] = useState('')
   const [resetError, setResetError] = useState('')
   const [isSendingEmail, setIsSendingEmail] = useState(false)
-
-  // Responsive state
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
   useEffect(() => {
@@ -47,7 +186,6 @@ function AdminLogin() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Warna solid
   const orangeColor = '#EA580C'
   const orangeLight = '#F97316'
   const textDark = '#1E293B'
@@ -55,7 +193,6 @@ function AdminLogin() {
   const bgWhite = '#FFFFFF'
   const borderColor = '#E2E8F0'
 
-  // ===== SIMPAN RIWAYAT LOGIN =====
   const simpanRiwayatLogin = async (adminId, adminName, loginType, detail) => {
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/v1.0/riwayat/admin`, {
@@ -73,7 +210,6 @@ function AdminLogin() {
     }
   }
 
-  // ===== HANDLE FORGOT PASSWORD =====
   const handleForgotPassword = async () => {
     if (!resetEmail) {
       setResetError('Silakan masukkan email Anda')
@@ -95,9 +231,7 @@ function AdminLogin() {
         `${import.meta.env.VITE_API_URL}/api/v1.0/admin/forgot-password`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: resetEmail }),
         },
       )
@@ -125,7 +259,6 @@ function AdminLogin() {
     }
   }
 
-  // ===== HANDLE LOGIN =====
   const handleLogin = async (e) => {
     e.preventDefault()
     setError('')
@@ -136,9 +269,7 @@ function AdminLogin() {
         `${import.meta.env.VITE_API_URL}/api/v1.0/admin/login`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
         },
       )
@@ -175,7 +306,6 @@ function AdminLogin() {
     }
   }
 
-  // ===== HANDLE GOOGLE LOGIN =====
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const base64Url = credentialResponse.credential.split('.')[1]
@@ -224,7 +354,6 @@ function AdminLogin() {
     setError('Login Google gagal. Pastikan popup tidak diblokir browser.')
   }
 
-  // ===== STYLES MODAL =====
   const modalStyles = {
     overlay: {
       position: 'fixed',
@@ -361,7 +490,6 @@ function AdminLogin() {
     },
   }
 
-  // ===== STYLES UTAMA =====
   const styles = {
     page: {
       backgroundImage: 'url(/bg-dashboard5.jpg)',
@@ -545,136 +673,6 @@ function AdminLogin() {
     },
   }
 
-  // ===== MODAL FORGOT PASSWORD =====
-  const ForgotPasswordModal = () => {
-    if (!showForgotModal) return null
-
-    return (
-      <div
-        style={modalStyles.overlay}
-        onClick={() => {
-          if (!isSendingEmail) {
-            setShowForgotModal(false)
-            setResetError('')
-            setResetMessage('')
-            setResetEmail('')
-          }
-        }}
-      >
-        <div style={modalStyles.modal} onClick={(e) => e.stopPropagation()}>
-          <button
-            style={modalStyles.modalCloseButton}
-            onClick={() => {
-              if (!isSendingEmail) {
-                setShowForgotModal(false)
-                setResetError('')
-                setResetMessage('')
-                setResetEmail('')
-              }
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = textDark)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = textLight)}
-          >
-            <FaTimes />
-          </button>
-
-          <h2 style={modalStyles.modalTitle}>
-            <FaLock size={isMobile ? 20 : 24} /> Lupa Password
-          </h2>
-          <p style={modalStyles.modalSubtitle}>
-            Masukkan email Anda untuk menerima link reset password.
-          </p>
-
-          {resetMessage && (
-            <div style={modalStyles.successMessage}>
-              <FaCheckCircle size={18} />
-              {resetMessage}
-            </div>
-          )}
-
-          {resetError && (
-            <div style={modalStyles.errorMessage}>{resetError}</div>
-          )}
-
-          <div style={modalStyles.modalInputWrapper}>
-            <FaEnvelope style={modalStyles.modalInputIcon} />
-            <input
-              type="email"
-              style={modalStyles.modalInput}
-              placeholder="Masukkan email Anda"
-              value={resetEmail}
-              onChange={(e) => {
-                setResetEmail(e.target.value)
-                setResetError('')
-                setResetMessage('')
-              }}
-              disabled={isSendingEmail}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = orangeColor
-                e.currentTarget.style.boxShadow = `0 0 0 3px ${orangeColor}20`
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = borderColor
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            />
-          </div>
-
-          <button
-            style={modalStyles.modalButton}
-            onClick={handleForgotPassword}
-            disabled={isSendingEmail}
-            onMouseEnter={(e) => {
-              if (!isSendingEmail) {
-                e.currentTarget.style.backgroundColor = orangeLight
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isSendingEmail) {
-                e.currentTarget.style.backgroundColor = orangeColor
-              }
-            }}
-          >
-            {isSendingEmail ? (
-              <>
-                <FaSpinner
-                  size={16}
-                  style={{ animation: 'spin 1s linear infinite' }}
-                />{' '}
-                Mengirim...
-              </>
-            ) : (
-              <>
-                <FaEnvelope size={16} /> Kirim Link Reset
-              </>
-            )}
-          </button>
-
-          {/* DIVIDER */}
-          <div style={modalStyles.divider}>
-            <div style={modalStyles.dividerLine} />
-            <span>or sign up using</span>
-            <div style={modalStyles.dividerLine} />
-          </div>
-
-          {/* GOOGLE LOGIN */}
-          <div style={modalStyles.googleWrapper}>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              useOneTap
-              shape="pill"
-              size={isMobile ? 'medium' : 'large'}
-              text="signin_with"
-              locale="id"
-            />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ===== CSS ANIMATION =====
   const animationStyles = `
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -696,7 +694,6 @@ function AdminLogin() {
       <div style={styles.page}>
         <div style={styles.overlay} />
         <div style={styles.card}>
-          {/* TOMBOL KEMBALI */}
           <button
             style={styles.backButton}
             onClick={() => navigate('/')}
@@ -713,7 +710,6 @@ function AdminLogin() {
           <h1 style={styles.title}>Login to continue</h1>
           <p style={styles.subtitle}>Masuk untuk mengelola toko cat</p>
 
-          {/* FORM USERNAME/PASSWORD */}
           <form onSubmit={handleLogin}>
             <div style={styles.inputGroup}>
               <label style={styles.label}>Username/Email</label>
@@ -827,14 +823,12 @@ function AdminLogin() {
             </button>
           </form>
 
-          {/* DIVIDER */}
           <div style={styles.divider}>
             <div style={styles.dividerLine} />
             <span>or sign up using</span>
             <div style={styles.dividerLine} />
           </div>
 
-          {/* GOOGLE LOGIN */}
           <div style={styles.googleWrapper}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -851,8 +845,28 @@ function AdminLogin() {
         </div>
       </div>
 
-      {/* MODAL FORGOT PASSWORD */}
-      <ForgotPasswordModal />
+      {/* ✅ KIRIMKAN SELURUH STATE & METHOD VIA PROPS */}
+      <ForgotPasswordModal
+        showForgotModal={showForgotModal}
+        setShowForgotModal={setShowForgotModal}
+        resetEmail={resetEmail}
+        setResetEmail={setResetEmail}
+        resetMessage={resetMessage}
+        setResetMessage={setResetMessage}
+        resetError={resetError}
+        setResetError={setResetError}
+        isSendingEmail={isSendingEmail}
+        handleForgotPassword={handleForgotPassword}
+        handleGoogleSuccess={handleGoogleSuccess}
+        handleGoogleError={handleGoogleError}
+        isMobile={isMobile}
+        modalStyles={modalStyles}
+        textDark={textDark}
+        textLight={textLight}
+        orangeColor={orangeColor}
+        orangeLight={orangeLight}
+        borderColor={borderColor}
+      />
     </GoogleOAuthProvider>
   )
 }

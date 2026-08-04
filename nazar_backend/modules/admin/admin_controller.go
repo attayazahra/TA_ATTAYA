@@ -168,7 +168,7 @@ func (c *AdminController) ForgotPassword(ctx *gin.Context) {
 		return
 	}
 
-	resetLink := "http://localhost:5174/admin/reset-password?token=" + token
+	resetLink := "https://api-nazar-paintweb.ryaze.my.id/admin/reset-password?token=" + token
 
 	err = utils.SendResetEmail(req.Email, resetLink)
 	if err != nil {

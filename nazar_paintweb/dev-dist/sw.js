@@ -82,16 +82,13 @@ define(['./workbox-6fc00345'], (function (workbox) { 'use strict';
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
     "url": "index.html",
-    "revision": "0.99qlsrbi1qg"
+    "revision": "0.fuu3eta2clo"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
     allowlist: [/^\/$/]
   }));
-  workbox.registerRoute(({
-    url,
-    request
-  }) => url.origin === "http://localhost:8081" && url.pathname.startsWith("/api/v1.0/") && request.method === "GET", new workbox.NetworkFirst({
+  workbox.registerRoute(/^https:\/\/api-nazar-paintweb\.ryaze\.my\.id\/api\/v1\.0\/.*/i, new workbox.NetworkFirst({
     "cacheName": "nazar-paint-api-cache",
     plugins: [new workbox.ExpirationPlugin({
       maxEntries: 100,
